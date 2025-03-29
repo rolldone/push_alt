@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigateFunction, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 interface propsInterface {
   [key: string]: any

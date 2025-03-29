@@ -30,8 +30,6 @@ fs.writeFile(filePath, pid.toString(), (err) => {
 
 const app = new Hono<{ Variables: { io: Server } }>();
 
-app.get('/', (c) => c.text('Hello Hono with TypeScript!'));
-
 // Enable CORS
 app.use('*', cors({
   origin: allowedOrigins,
@@ -116,6 +114,15 @@ app.route('/api/channel', channelController);
 app.route('/api/test-connection', testConnectionController);
 app.route('/api/setting', settingController);
 app.route('/api/message', messageController);
+
+
+import { serveStatic } from '@hono/node-server/serve-static';
+
+// Serve static files from webapp/dist
+app.use('/*', serveStatic({ root: './webapp/dist' }));
+
+// Fallback to index.html for SPA routing
+app.get('/*', serveStatic({ path: './webapp/dist/index.html' }));
 
 // Start the server
 const server = serve({

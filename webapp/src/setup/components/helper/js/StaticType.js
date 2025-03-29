@@ -1,10 +1,10 @@
 let theWIndow = window;
 
-(function(global){
-  var typeVariable = function(){
+(function (global) {
+  var typeVariable = function () {
     var types = {
-      'get': function(prop) {
-         return Object.prototype.toString.call(prop);
+      'get': function (prop) {
+        return Object.prototype.toString.call(prop);
       },
       'null': '[object Null]',
       'object': '[object Object]',
@@ -18,97 +18,97 @@ let theWIndow = window;
       'keyboardevent': '[object KeyboardEvent]'
     };
     return {
-      check : function(props){
+      check: function (props) {
         return types.get(props);
       },
       types
     };
   };
   /* Static Type check allowed type data */
-  let staticType = function (inVariable, typeDatas = [],debug=false) {
+  let staticType = function (inVariable, typeDatas = [], debug = false) {
     var isWRong = true;
     var closureCondition = function (theVariable, arrayRecordTypeOf) {
       return function (typeDataItem) {
-        if(typeDataItem == null){
+        if (typeDataItem == null) {
           typeDataItem = "Null";
-        }else{
-          typeDataItem = typeDataItem.name+'';
+        } else {
+          typeDataItem = typeDataItem.name + '';
         }
-        if(theVariable == undefined){
+        if (theVariable == undefined) {
           theVariable = null;
         }
         var getType = typeVariable();
-        if(debug == true){
+        if (debug == true) {
           debugger;
         }
-        if(debug == true){
+        if (debug == true) {
           debugger;
         }
         let result = false;
-        switch(true){
+        switch (true) {
           case typeDataItem.toLowerCase() == 'null':
             result = getType.check(theVariable) == getType.types.null;
-            if(result == false){
+            if (result == false) {
               arrayRecordTypeOf.push(typeDataItem);
             }
             return result;
           case typeDataItem.toLowerCase() == 'function':
             result = getType.check(theVariable) == getType.types.function;
-            if(result == false){
+            if (result == false) {
               arrayRecordTypeOf.push(typeDataItem);
             }
             return result;
           case typeDataItem.toLowerCase() == 'object':
             result = getType.check(theVariable) == getType.types.object;
-            if(result == false){
+            if (result == false) {
               arrayRecordTypeOf.push(typeDataItem);
             }
             return result;
           case typeDataItem.toLowerCase() == 'array':
             result = getType.check(theVariable) == getType.types.array;
-            if(result == false){
+            if (result == false) {
               arrayRecordTypeOf.push(typeDataItem);
             }
             return result;
           case typeDataItem.toLowerCase() == 'string':
             result = getType.check(theVariable) == getType.types.string;
-            if(result == false){
+            if (result == false) {
               arrayRecordTypeOf.push(typeDataItem);
             }
             return result;
           case typeDataItem.toLowerCase() == 'boolean':
             result = getType.check(theVariable) == getType.types.boolean;
-            if(result == false){
+            if (result == false) {
               arrayRecordTypeOf.push(typeDataItem);
             }
             return result;
           case typeDataItem.toLowerCase() == 'number':
             result = getType.check(theVariable) == getType.types.number;
-            if(result == false){
+            if (result == false) {
               arrayRecordTypeOf.push(typeDataItem);
             }
             return result;
           case typeDataItem.toLowerCase() == 'date':
             result = getType.check(theVariable) == getType.types.date;
-            if(result == false){
+            if (result == false) {
               arrayRecordTypeOf.push(typeDataItem);
             }
             return result;
           case getType.types[typeDataItem.toLowerCase()] != null:
             return getType.check(theVariable) == getType.types[typeDataItem.toLowerCase()];
           default:
-            if(getType.types[typeDataItem.toLowerCase()] == undefined){
+            if (getType.types[typeDataItem.toLowerCase()] == undefined) {
               getType.types[typeDataItem.toLowerCase()] = getType.check(theVariable);
-              if(debug == true){
-                console.log(typeDataItem,getType.types[typeDataItem.toLowerCase()]);
+              if (debug == true) {
+                console.log(typeDataItem, getType.types[typeDataItem.toLowerCase()]);
                 debugger;
               }
               result = getType.check(theVariable) == getType.types[typeDataItem.toLowerCase()];
-              if(result == false){
+              if (result == false) {
                 arrayRecordTypeOf.push(typeDataItem);
               }
               return result;
-            }else{
+            } else {
               arrayRecordTypeOf.push(typeDataItem);
             }
             break;
@@ -118,15 +118,15 @@ let theWIndow = window;
     };
     var recordTypeOf = [];
     var doCheckStaticType = closureCondition(inVariable, (recordTypeOf = []));
-    if(debug == true){
+    if (debug == true) {
       debugger;
     }
     for (var a = 0; a < typeDatas.length; a++) {
       let ttt = doCheckStaticType(typeDatas[a]);
-      if(debug == true){
+      if (debug == true) {
         debugger;
       }
-      if ( ttt == true) {
+      if (ttt == true) {
         isWRong = false;
         break;
       }
@@ -136,18 +136,19 @@ let theWIndow = window;
       console.error("staticType - error ", messageError);
       throw new Error(messageError);
     }
-    if(debug == true){
+    if (debug == true) {
       debugger;
     }
   };
   if (typeof define === 'function' && define.amd) {
     /* AMD support */
-    define(function(){
+    define(function () {
       return staticType;
     });
   } else if (typeof module === 'object' && module.exports) {
     /* CJS support */
-    module.exports = staticType;
+    // module.exports = staticType;
+    global.StaticType = staticType
   } else {
     /** @namespace
      * staticType is the root namespace for all staticType.js functionality.

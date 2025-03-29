@@ -147,7 +147,8 @@ let theWIndow = window;
     });
   } else if (typeof module === 'object' && module.exports) {
     /* CJS support */
-    module.exports = staticType;
+    // module.exports = staticType;
+    global.StaticType = staticType
   } else {
     /** @namespace
      * staticType is the root namespace for all staticType.js functionality.

@@ -260,9 +260,10 @@ let theWIndow = window;
       return smartValidation;
     });
   } else if (typeof module === 'object' && module.exports) {
-    alert('2');
+    // alert('2');
     /* CJS support */
     module.exports = smartValidation;
+    global.smartValidation = smartValidation;
   } else {
     /** @namespace
      * smartValidation is the root namespace for all SmartPushState.js functionality.
