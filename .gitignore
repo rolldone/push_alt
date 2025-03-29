@@ -23,3 +23,10 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 pid.txt
+.ssh/
+.sync_temp/*.sqlite
+docker-compose.yaml
+docker_setup.sh
+image_node/
+sync-config.yaml
+.sync_ignore
