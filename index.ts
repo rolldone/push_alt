@@ -27,7 +27,7 @@ const run = async function () {
   // Start push-alt
   const { server, db } = await pushAlt({
     port: 4321,
-    corsOrigins: ['http://myapp.com'],
+    corsOrigins: process.env.CORS_ORIGINS?.split(','),
     runMigrations: true,
     databaseAuthToken: process.env.DATABASE_AUTH_TOKEN,
     databaseUrl: process.env.DATABASE_URL,

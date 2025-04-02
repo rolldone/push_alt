@@ -123,7 +123,7 @@ export const createPushAlt = async (options: PushAltOptions = {}) => {
 
         // Apply admin middleware to protected routes
         app.use('/api/admin/*', AdminMiddleware);
-        app.use('/api/channel/*', AdminMiddleware);
+        // app.use('/api/channel/*', AdminMiddleware);
         app.use('/api/test-connection/*', AdminMiddleware);
         app.use('/api/setting/*', AdminMiddleware);
 
@@ -140,7 +140,7 @@ export const createPushAlt = async (options: PushAltOptions = {}) => {
         // Serve static files
         app.use('/*', serveStatic({ root: './webapp/dist' }));
         app.get('/admin/*', serveStatic({ path: './webapp/dist/index.html' }));
-        
+
         const server = serve({ fetch: app.fetch, port });
         console.log(`Server running on port ${port}`);
 
@@ -156,22 +156,28 @@ export const createPushAlt = async (options: PushAltOptions = {}) => {
         io.on('connection', (socket) => {
             console.log('Client connected:', socket.id);
 
-            socket.on('join_channel', async ({ token, channel_name }) => {
-                const channel = await db.select()
-                    .from(channelsTable)
-                    .where(and(
-                        eq(channelsTable.token, token),
-                        eq(channelsTable.channel_name, channel_name),
-                        gt(channelsTable.expires_at, dayjs().format('YYYY-MM-DD'))
-                    ))
-                    .limit(1);
+            socket.on('join_channel', async ({ token }) => {
+                let channel = null
+                try {
+                    channel = await db.select()
+                        .from(channelsTable)
+                        .where(and(
+                            eq(channelsTable.token, token),
+                            gt(channelsTable.expires_at, dayjs().format('YYYY-MM-DD'))
+                        ))
+                        .limit(1);
 
-                if (!channel.length) {
-                    socket.emit('error', { message: 'Invalid token or channel' });
+                    if (!channel.length) {
+                        socket.emit('error', { message: 'Invalid token or channel' });
+                        socket.disconnect();
+                        return;
+                    }
+                } catch (error: any) {
+                    socket.emit('error', { message: error.message });
                     socket.disconnect();
                     return;
                 }
-
+                const channel_name = channel[0].channel_name;
                 const workspace_id = channel[0].workspace_id;
                 const room = `workspace:${workspace_id}:${channel_name}`;
                 socket.join(room);
