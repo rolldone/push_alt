@@ -58,6 +58,107 @@ SQLITE_DB_PATH=./local.db  # Path for SQLite (if DB_TYPE=sqlite)
   npm run start
   ```
 
+### Flow system work
+```
++-------------------------------------+
+|   Client Flow: Token & Messaging    |
+|   (Interacting with Push-Alt Server)|
++-------------------------------------+
+          |
+          v
++------------------------------------+
+| 1. Request Token                   |
++------------------------------------+
+| POST /api/channel/auth             |
+| Headers:                           |
+|   Content-Type: application/json   |
+| Body:                              |
+|   {                                |
+|     "app_id": "your-app-id",       |
+|     "app_key": "your-app-key",     |
+|     "channel_name": "general",     |
+|     "expires_in_seconds": 3600     |
+|   }                                |
++------------------------------------+
+          |
+          v
++--------------------------------------------------------------+
+| 2. Receive Token Response                                    |
++--------------------------------------------------------------+
+| Success (200):                                               |
+|   {                                                          |
+|     "success": true,                                         |
+|     "token": "random-token",                                 |
+|     "message_listen_name": "workspace:<id>:general:message", |
+|     "message": "Channel created",                            |
+|     "data": {...}                                            |
+|   }                                                          |
+| Failure (401/400):                                           |
+|   { "success": false, "message": "..." }                     |
++--------------------------------------------------------------+
+          |
+          | (if success)
+          v
++--------------------------------------------------------------+
+| 3. Connect to Socket.IO                                      |
++--------------------------------------------------------------+
+| const socket = io('http://localhost:4321', { path: '/ws' }); |
++--------------------------------------------------------------+
+          |
+          v
++--------------------------------+
+| 4. Join Channel with Token     |
++--------------------------------+
+| socket.emit('join_channel', {  |
+|   "token": "random-token",     |
+|   "channel_name": "general"    |
+| });                            |
++--------------------------------+
+          |
+          +-----------------+-------------------+
+          | (if joined)     | (if error)        |
+          v                 v                   |
++----------------+  +----------------+          |
+| 5a. Joined     |  | 5b. Error      |          |
++----------------+  +----------------+          |
+| socket.on('joined', (data) => {    |          |
+|   console.log(data.message);       |          |
+|   // "Connected to general..."     |          |
+| });                                |          |
++----------------+                   |          |
+          |                 +-------------------------------+
+          |                 | socket.on('error', (err) => {
+          |                 |   console.error(err.message);
+          |                 | });
+          |                 +-------------------------------+
+          |
+          v
++-----------------------------------------------------------------------+
+| 6. Listen for Messages                                                |
++-----------------------------------------------------------------------+
+| socket.on("workspace:<id>:general:message", (msg) => {                |
+|   console.log('Received:', msg); // e.g., { text: "Hello, world!" }   |
+| });                                                                   |
+| // Use message_listen_name from step 2                                |
++-----------------------------------------------------------------------+
+          |
+          v
++--------------------------------------------------------+
+| 7. (Optional) Send Message                             |
++--------------------------------------------------------+
+| POST /api/message/emit                                 |
+| Headers:                                               |
+|   Content-Type: application/json                       |
+| Body:                                                  |
+|   {                                                    |
+|     "app_id": "your-app-id",                           |
+|     "channel_name": "general",                         |
+|     "body": { "text": "Hello, world!" }                |
+|   }                                                    |
+| Response:                                              |
+|   { "success": true, "message": "Message emitted..." } |
++--------------------------------------------------------+
+```
 ### Database Migrations
 
 Generate and apply database migrations with Drizzle:
