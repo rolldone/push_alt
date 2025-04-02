@@ -22,51 +22,29 @@ import pushAlt from './src/index';
  * Note: DATABASE_URL and DATABASE_AUTH_TOKEN are ignored when DB_TYPE=sqlite.
  */
 
-// Start push-alt
-const { server, db } = await pushAlt({
-  port: 4321,
-  corsOrigins: ['http://myapp.com'],
-  runMigrations: true,
-  databaseAuthToken: process.env.DATABASE_AUTH_TOKEN,
-  databaseUrl: process.env.DATABASE_URL,
-  dbType: process.env.DB_TYPE as "libsql",
-  socketOptions: {}
-});
+const run = async function () {
 
-
-const { io } = server((props) => {
-
-  let app = props.app
-
-  // Extend the app if needed
-  app.get('/custom-route', (c) => {
-    return c.text('Hello from user app!')
+  // Start push-alt
+  const { server, db } = await pushAlt({
+    port: 4321,
+    corsOrigins: ['http://myapp.com'],
+    runMigrations: true,
+    databaseAuthToken: process.env.DATABASE_AUTH_TOKEN,
+    databaseUrl: process.env.DATABASE_URL,
+    dbType: process.env.DB_TYPE as "libsql",
+    socketOptions: {}
   });
 
-  app.post('/api/message/emit', async (c) => {
-    const { app_id, channel_name, body } = await c.req.json();
 
-    if (!app_id || !channel_name || !body) {
-      return c.json({ success: false, message: 'app_id, channel_name, and body are required' }, 400);
-    }
+  const { io } = server((props) => {
 
-    const workspace = await db.select()
-      .from(workspacesTable)
-      .where(eq(workspacesTable.app_id, app_id))
-      .limit(1);
+    let app = props.app
 
-    if (!workspace.length) {
-      return c.json({ success: false, message: 'Workspace not found' }, 404);
-    }
-
-    const workspace_id = workspace[0].id;
-    const room = `workspace:${workspace_id}:${channel_name}`;
-
-    console.log('ROOM :: ', room);
-    const io = c.get('io');
-    io.to(room).emit(room + ':message', body);
-
-    return c.json({ success: true, message: 'Message emitted to connected clients' });
+    // Extend the app if needed
+    app.get('/custom-route', (c) => {
+      return c.text('Hello from user app!')
+    });
   })
+}
 
-})
+run();

@@ -3,9 +3,8 @@
   "version": "0.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npx cpy-cli 'src/db/migrations/**/*' 'dist/src/db/migrations'",
     "dev": "npx tsx index.ts",
     "start": "node dist/index.js",
     "prepublishOnly": "npm run build",
@@ -19,6 +18,7 @@
     "@libsql/client": "^0.15.1",
     "bcrypt": "^5.1.1",
     "better-sqlite3": "^11.9.1",
+    "cpy-cli": "^5.0.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.40.1",
