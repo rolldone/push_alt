@@ -1,28 +1,21 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "include": [
-    ".astro/types.d.ts",
-    "**/*"
-  ],
-  "exclude": [
-    "dist"
-  ],
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "ESNext",
-    "module": "ESNext",
-    "strict": true,
-    "esModuleInterop": true,
-    "moduleResolution": "Node",
-    "verbatimModuleSyntax": true,
-    "allowUnusedLabels": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "target": "ES2020", // Modern Node.js target (adjustable)
+    "module": "ESNext", // Change to ESM
+    "outDir": "./dist", // Output compiled JS here
+    "rootDir": "./src", // Source files in src/
+    "declaration": true, // Generate .d.ts files for TS users
+    "strict": true, // Enforce strict type checking
+    "esModuleInterop": true, // Better module interop
+    "moduleResolution": "Node", // Node.js-style resolution
+    "skipLibCheck": true, // Speed up compilation
+    "allowUnusedLabels": true, // Keep your preference
+    "noUnusedLocals": false, // Keep your preference
+    "noUnusedParameters": false // Keep your preference
   },
+  "include": ["src/**/*"], // Compile everything in src/
+  "exclude": ["node_modules", "dist", "user-app"], // Exclude user-app/
   "ts-node": {
-    "esm": true
+    "esm": false // Use CommonJS with ts-node for consistency
   }
 }

@@ -1,6 +1,6 @@
 import request from 'superagent';
 
-const BASE_API_URL = import.meta.env.VITE_PUBLIC_MASTER_DATA_API;
+const BASE_API_URL = "";
 const superagent = request.agent();
 superagent.set('Authorization', 'Bearer ' + window.localStorage.getItem("token") || "");
 

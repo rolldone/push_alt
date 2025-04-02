@@ -21,7 +21,7 @@ const App = () => {
     // Base path is /auth, slug is the part after (e.g., "login")
     return (
         <>
-            <BrowserRouter basename="/">
+            <BrowserRouter basename="/admin">
                 <Routes>
                     <Route path="/auth/*" element={<AuthApp />} />
                     <Route path="/setup" element={<SetupApp />} />

@@ -10,4 +10,4 @@ if kill -0 $pid 2> /dev/null; then
 fi
 
 # Run the Go program in a new terminal
-npm run start
+npm run dev

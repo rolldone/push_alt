@@ -8,3 +8,4 @@ export const settingTable = sqliteTable("settings", {
     created_at: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(CURRENT_TIMESTAMP)`), // When the request was made
     updated_at: integer('updated_at').notNull().default(sql`(CURRENT_TIMESTAMP)`).$onUpdate(() => sql`(current_timestamp)`), // When the request was made
 });
+
