@@ -9,32 +9,64 @@ interface StateType {
     channels: ChannelType[];
     loading: boolean;
     error?: string;
+    currentPage: number; // Current page for pagination
+    hasMore: boolean;    // New state for checking if there are more pages
 }
 
 export class ChannelListClass extends BaseStateClass<StateType, PropType> {
-    constructor() {
-        super();
-        this.state = {
-            channels: [],
-            loading: false,
-            error: undefined,
-        };
-    }
-
+    
     componentDidMount() {
         this.fetchChannels();
     }
 
-    async fetchChannels() {
+    async fetchChannels(page: number = 1) {
         this.setState({ loading: true, error: undefined });
         try {
-            const response = await ChannelService.gets({});
+            const response = await ChannelService.gets({ page, take: 10 }); // Assuming 10 items per page
             const { success, data, message } = response;
             if (!success) throw new Error(message || 'Failed to fetch channels');
-            this.setState({ channels: data, loading: false });
+            
+            // If the returned data length is less than the `take` value, it means there are no more pages
+            const hasMore = data.length === 10;
+
+            this.setState({ 
+                channels: data, 
+                loading: false, 
+                currentPage: page, 
+                hasMore 
+            });
         } catch (err: any) {
-            this.setState({ error: err.message || 'Error fetching channels', loading: false });
+            this.setState({ 
+                error: err.message || 'Error fetching channels', 
+                loading: false 
+            });
         }
+    }
+
+    renderPagination() {
+        const { currentPage, channels } = this.state;
+
+        return (
+            <div className="d-flex justify-content-center mt-3">
+                <button
+                    className="btn btn-primary me-2"
+                    onClick={() => this.fetchChannels(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </button>
+                <span className="align-self-center">
+                    Page {currentPage}
+                </span>
+                <button
+                    className="btn btn-primary ms-2"
+                    onClick={() => this.fetchChannels(currentPage + 1)}
+                    disabled={channels.length < 10} // Disable if less than 10 items are returned
+                >
+                    Next
+                </button>
+            </div>
+        );
     }
 
     render() {
@@ -77,6 +109,7 @@ export class ChannelListClass extends BaseStateClass<StateType, PropType> {
                         )}
                     </tbody>
                 </Table>
+                {this.renderPagination()}
             </Container>
         );
     }
@@ -87,9 +120,11 @@ export default function ChannelList(props: PropType) {
     methods.defineState(useState<StateType>({
         channels: [],
         loading: false,
+        currentPage: 1,
+        hasMore: true
     }), props);
-    useEffect(()=>{
+    useEffect(() => {
         methods.componentDidMount()
-    },[])
+    }, [])
     return methods.render();
 }

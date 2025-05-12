@@ -7,7 +7,7 @@ import ChannelService from '../services/ChannelService';
 import MessageService from '../services/MessageService';
 import ButtonLoading from '../components/Button/ButtonLoading';
 
-const BASE_API_URL = "";
+const BASE_API_URL = import.meta.env.VITE_PUBLIC_MASTER_DATA_API || '';
 
 interface PropType {
     onCloseListener?: () => void;

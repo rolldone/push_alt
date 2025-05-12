@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import db from '../db';
 import { channelsTable } from '../db/schema/channel';
 import { workspacesTable } from '../db/schema/workspace';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql, desc } from 'drizzle-orm';
 import dayjs from 'dayjs';
 import bcrypt from 'bcrypt';
 
@@ -56,25 +56,41 @@ channelController.post('/auth', async (c) => {
     });
 });
 
-// GET /api/channel/channels
+// GET /api/channel/channels with pagination
 channelController.get('/channels', async (c) => {
-    const channelsList = await db.query.channelsTable.findMany({
-        columns: {
-            id: true,
-            workspace_id: true,
-            channel_name: true,
-            token: true,
-            created_at: true,
-            expires_at: true,
-        },
-        with: {
-            workspace: {
-                columns: {
-                    name: true,
-                },
-            },
-        },
-    });
+    const page = parseInt(c.req.query('page') || '1', 10);
+    const take = parseInt(c.req.query('take') || '10', 10);
+
+    // Validate page and take parameters
+    if (isNaN(page) || page < 1 || isNaN(take) || take < 1) {
+        return c.json({ success: false, message: 'Invalid pagination parameters' }, 400);
+    }
+
+    const offset = (page - 1) * take;
+
+    // Fetch paginated data with descending order
+    const channelsList = await db.select({
+        id: channelsTable.id,
+        workspace_id: channelsTable.workspace_id,
+        channel_name: channelsTable.channel_name,
+        token: channelsTable.token,
+        created_at: channelsTable.created_at,
+        expires_at: channelsTable.expires_at,
+    })
+        .from(channelsTable)
+        .limit(take)
+        .offset(offset)
+        .orderBy(desc(channelsTable.created_at)); // Use desc for descending order
+
+    // Fetch the total count of channels
+    const totalChannelsResult = await db
+        .select({ count: sql<number>`COUNT(*)` })
+        .from(channelsTable);
+
+    const totalChannels = totalChannelsResult[0]?.count || 0;
+
+    // Check if there are more records
+    const hasMore = offset + take < totalChannels;
 
     const formattedList = channelsList.map((channel) => ({
         id: channel.id,
@@ -83,10 +99,14 @@ channelController.get('/channels', async (c) => {
         token: channel.token,
         created_at: channel.created_at,
         expires_at: channel.expires_at,
-        workspace: channel.workspace || { name: 'N/A' },
     }));
 
-    return c.json({ success: true, data: formattedList });
+    return c.json({
+        success: true,
+        data: formattedList,
+        hasMore: hasMore,
+        message: null,
+    });
 });
 
 // GET /api/channel/:id

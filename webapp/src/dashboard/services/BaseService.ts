@@ -1,6 +1,6 @@
 import request, { SuperAgentRequest } from 'superagent';
 
-const BASE_API_URL = "";
+const BASE_API_URL = import.meta.env.VITE_PUBLIC_MASTER_DATA_API || '';
 // Define your middleware function
 const myMiddleware = (request: SuperAgentRequest) => {
     console.log('Request is being made to:', request.url);
