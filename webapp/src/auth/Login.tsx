@@ -102,7 +102,7 @@ export class LoginCLass extends BaseStateClass<LoginState, LoginProps> {
             let data = resData.data;
             window.localStorage.setItem("token", data.access_token);
             window.localStorage.setItem("refresh_token", data.refresh_token);
-            window.location.href = "/dashboard"
+            window.location.href = "/admin/dashboard"
         } catch (error) {
             console.error("submit - err ", error)
         } finally {

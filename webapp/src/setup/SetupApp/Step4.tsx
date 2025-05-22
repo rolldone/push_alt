@@ -5,7 +5,7 @@ import { Alert, Button } from "react-bootstrap";
 export class Step4Class extends Step1Class {
     handleClick(action: string, props?: any, e?: any): void {
         if (action == "LOGIN") {
-            window.location.href = "/auth/login"
+            window.location.href = "/admin/auth/login"
             return;
         }
         super.handleClick(action, props, e)
