@@ -1,0 +1,43 @@
+/* General modal styling */
+.modal-body {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+/* Styling for the messages container */
+.messages-container {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+/* Styling for the code snippet container */
+.code-snippet-container {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: monospace;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Button styling */
+button {
+    margin-right: 10px;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

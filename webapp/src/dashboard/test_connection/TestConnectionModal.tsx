@@ -6,6 +6,7 @@ import TestConnectionService, { TestConnectionType } from '../services/TestConne
 import ChannelService from '../services/ChannelService';
 import MessageService from '../services/MessageService';
 import ButtonLoading from '../components/Button/ButtonLoading';
+import './TestConnectionModal.css';
 
 const BASE_API_URL = import.meta.env.VITE_PUBLIC_MASTER_DATA_API || '';
 
@@ -184,7 +185,7 @@ export class TestConnectionModalClass extends BaseStateClass<StateType, PropType
     }
 
     render() {
-        const { show, connection_status,message_listen_name, messages, message_input, test_connection_data } = this.state;
+        const { show, connection_status, message_listen_name, messages, message_input, test_connection_data } = this.state;
 
         return (
             <Modal show={show} onHide={this.handleClick.bind(this, 'CLOSE')}>
@@ -239,8 +240,46 @@ export class TestConnectionModalClass extends BaseStateClass<StateType, PropType
                                     Loading...
                                 </ButtonLoading>
                             </Form.Group>
-                        </>
-                    )}
+                            <div className="code-snippet-container">
+                                <h6>Socket.IO Connection Example:</h6>
+                                <pre>
+                                    <code>
+{`const socket = io(BASE_API_URL, {
+    path: "/ws"
+});
+
+socket.on('connect', () => {
+    this.setState({ connection_status: 'connected', socket });
+    this.addMessage('Connected to Socket.IO server');
+    socket.emit('join_channel', {
+        channel_name: this.state.test_connection_data!.channel_name,
+        token: this.state.token
+    });
+});
+
+socket.on(this.state.message_listen_name, (msg: string) => {
+    console.log("bbb :: " + this.state.test_connection_data.channel_name + " :: ", msg);
+    this.addMessage(\`Received: \${msg}\`);
+});
+
+socket.on('connect_error', (err) => {
+    this.setState({ connection_status: 'error' });
+    this.addMessage(\`Connection error: \${err.message}\`);
+});
+
+socket.on('joined', (msg) => {
+    this.addMessage(JSON.stringify(msg));
+});
+
+socket.on('disconnect', () => {
+    this.setState({ connection_status: 'disconnected' });
+    this.addMessage('Disconnected from server');
+});`}
+                                </code>
+                            </pre>
+                        </div>
+                    </>
+                )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
