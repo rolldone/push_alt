@@ -26,7 +26,7 @@ const AuthApp = () => {
                 <Container>
                     <Navbar.Brand href="/auth">Auth App</Navbar.Brand>
                     <Nav className="me-auto">
-                        <Nav.Link href="/auth/login">Login</Nav.Link>
+                        <Nav.Link href="auth/login">Login</Nav.Link>
                         {/* Add more links like /auth/register if needed */}
                     </Nav>
                 </Container>

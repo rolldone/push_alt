@@ -71,7 +71,7 @@ export class DashboardAppCLass extends BaseStateClass<StateType, PropType> {
             })
         } catch (error) {
             console.error("refershToken - err ", error)
-            window.location.replace("/auth/login")
+            window.location.replace("/admin/auth/login")
         }
     }
 

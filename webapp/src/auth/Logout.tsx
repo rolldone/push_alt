@@ -16,7 +16,7 @@ export class LogoutClass extends BaseStateClass<StateType, PropType> {
     }
     handleClick(action: string, props?: any, e?: any) {
         if (action == "LOGIN") {
-            window.location.replace("/auth/login")
+            window.location.replace("/admin/auth/login")
         }
     }
     render() {
