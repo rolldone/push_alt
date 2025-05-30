@@ -170,7 +170,7 @@ export const createPushAlt = async (options: PushAltOptions = {}) => {
         const io = new Server(server, {
             path: '/ws',
             serveClient: false,
-            cors: { origin: corsOrigins },
+            cors: { origin: corsOrigins, credentials: true },
             ...socketOptions,
         });
 
