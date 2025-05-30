@@ -4,3 +4,4 @@ export * from './setting';
 export * from './user';
 export * from './channel';
 export * from "./refreshToken";
+export * from './cors';

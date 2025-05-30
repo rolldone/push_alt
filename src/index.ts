@@ -8,7 +8,7 @@ import { Server, type DefaultEventsMap, type ServerOptions } from 'socket.io';
 import fs from 'fs';
 import { and, eq, gt } from 'drizzle-orm';
 import dayjs from 'dayjs';
-import { channelsTable } from './db/schema';
+import { channelsTable, corsEntriesTable } from './db/schema';
 import db, { getDbType } from './db';
 import authController from './controllers/AuthController';
 import adminController from './controllers/AdminController';
@@ -23,6 +23,7 @@ import type { BlankSchema } from 'hono/types';
 import { migrate as migrateSqlite } from 'drizzle-orm/better-sqlite3/migrator'; // SQLite migrator
 import { migrate as migrateLibsql } from 'drizzle-orm/libsql/migrator'; // LibSQL migrator
 import setupController from './controllers/SetupController';
+import corsController from './controllers/CorsController';
 
 // Export Hono type with our custom variables
 export const hono = HonoBase as new <T extends Record<string, any>>() => HonoBase<T>; // Export Hono constructor
@@ -41,7 +42,6 @@ export interface PushAltOptions {
 }
 
 export const createPushAlt = async (options: PushAltOptions = {}) => {
-
     const {
         port = 4321,
         socketOptions = {},
@@ -88,6 +88,20 @@ export const createPushAlt = async (options: PushAltOptions = {}) => {
     console.log(`PID ${pid} has been written to ${filePath}`);
 
 
+    // Function to dynamically fetch and merge CORS origins
+    const getCorsOrigins = async () => {
+        const envOrigins = process.env.CORS_ORIGINS?.split(',') || [];
+        const dbOrigins = await db.select().from(corsEntriesTable).then(entries => entries.map(entry => entry.url));
+        const staticOrigins = ['http://localhost:5173'];
+
+        // Merge and remove duplicates
+        return Array.from(new Set([...envOrigins, ...dbOrigins, ...staticOrigins]));
+    };
+
+    // Fetch initial CORS origins
+    let corsOriginsDynamic = await getCorsOrigins();
+    console.log('Initial CORS Origins:', corsOriginsDynamic);
+
     // Start the server
     const server = (callback?: {
         (props: {
@@ -98,16 +112,23 @@ export const createPushAlt = async (options: PushAltOptions = {}) => {
             }, BlankSchema, "/">
         }): void
     }) => {
-
         // Initialize Hono app using our exported hono
         const app = new hono<{ Variables: { io: Server } }>();
 
-        // Enable CORS
-        app.use('*', cors({
-            origin: corsOrigins,
-            allowMethods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-            allowHeaders: ['Content-Type', 'Authorization', 'Upgrade', 'Connection'],
-        }));
+        // Enable CORS with dynamic origins
+        app.use('*', async (c, next) => {
+            const corsOriginsDynamic = await getCorsOrigins(); // Refresh CORS origins dynamically
+            const corsMiddleware = cors({
+                origin: corsOriginsDynamic,
+                allowMethods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+                allowHeaders: ['Content-Type', 'Authorization', 'Upgrade', 'Connection'],
+            });
+
+            // Call the CORS middleware and ensure `await next()` is called
+            return await corsMiddleware(c, async () => {
+                return await next();
+            });
+        });
 
         // Inject Socket.IO into context
         app.use('*', async (c, next) => {
@@ -136,6 +157,7 @@ export const createPushAlt = async (options: PushAltOptions = {}) => {
         app.route('/api/setting', settingController);
         app.route('/api/message', messageController);
         app.route('/api/setup', setupController);
+        app.route('/api/cors', corsController); // Register CorsController
 
         // Serve static files
         app.use('/*', serveStatic({ root: './webapp/dist' }));
