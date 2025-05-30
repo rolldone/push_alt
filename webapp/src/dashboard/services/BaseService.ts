@@ -13,6 +13,16 @@ const superagent = request.agent()
 
 superagent.use(myMiddleware);
 
+// Register CORS URLs dynamically
+const registerUrl = (key: string, url: string) => {
+    // Implementation of registerUrl function
+};
+
+registerUrl('cors.add', BASE_API_URL + '/api/cors');
+registerUrl('cors.remove', BASE_API_URL + '/api/cors/:id');
+registerUrl('cors.list', BASE_API_URL + '/api/cors');
+registerUrl('cors.edit', BASE_API_URL + '/api/cors/:id');
+
 export default {
     superagent,
     URL: {
@@ -53,5 +63,11 @@ export default {
         'admin.restore': BASE_API_URL + '/api/admin/restore',
         'admin.view': BASE_API_URL + '/api/admin/{id}/view',
         'admin.admins': BASE_API_URL + '/api/admin/admins',
+
+        // CORS
+        'cors.add': BASE_API_URL + '/api/cors',
+        'cors.remove': BASE_API_URL + '/api/cors/:id',
+        'cors.list': BASE_API_URL + '/api/cors',
+        'cors.edit': BASE_API_URL + '/api/cors/:id',
     }
 }

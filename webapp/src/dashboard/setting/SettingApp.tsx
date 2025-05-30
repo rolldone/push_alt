@@ -5,6 +5,7 @@ import BaseStateClass from "../components/helper/BaseStateClass";
 import Company from "./company/Company";
 import Profile from "./profile/Profile";
 import Admin from "./admin/Admin";
+import CorsList  from "./cors/CorsList";
 
 type PropType = {
 
@@ -117,6 +118,11 @@ export class SettingAppClass extends BaseStateClass<StateType, PropType> {
                                             >
                                                 Main Setting
                                             </a>
+                                             <a
+                                                href="#cors"
+                                                className={"list-group-item list-group-item-action d-flex align-items-center " + (segment == "#cors" ? "active" : "")}>
+                                                Cors
+                                            </a>
                                             <a
                                                 href="#profile"
                                                 className={"list-group-item list-group-item-action d-flex align-items-center " + (segment == "#profile" ? "active" : "")}>
@@ -148,6 +154,8 @@ export class SettingAppClass extends BaseStateClass<StateType, PropType> {
                                                     return <Profile></Profile>
                                                 case "#admin":
                                                     return <Admin></Admin>
+                                                case "#cors":
+                                                    return <CorsList></CorsList>
                                                 // case "#group_role":
                                                 //     return <GroupRole></GroupRole>
                                             }

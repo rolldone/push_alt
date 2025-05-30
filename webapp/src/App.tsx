@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import 'bootstrap-icons/font/bootstrap-icons.css'; // Import Bootstrap Icons
 import AuthApp from './auth/AuthApp';
 import SetupApp from './setup/SetupApp';
 import DashboardApp from './dashboard/DashboardApp';

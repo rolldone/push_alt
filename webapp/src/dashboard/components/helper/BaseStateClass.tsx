@@ -16,13 +16,6 @@ export default class BaseStateClass<T, X> {
         return {} as T
     }
 
-    constructor(state?: [Partial<T> | T, Dispatch<SetStateAction<any>>], props?: X) {
-        if (state == null) return
-        if (props == null) return
-        this.state = state[0] as T
-        this.originSetState = state[1]
-        this.props = props || {} as any
-    }
     defineState(state: [Partial<T> | T, Dispatch<SetStateAction<any>>], props: X) {
         this.state = state[0] as T
         this.originSetState = state[1]
