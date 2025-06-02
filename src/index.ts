@@ -170,7 +170,17 @@ export const createPushAlt = async (options: PushAltOptions = {}) => {
         const io = new Server(server, {
             path: '/ws',
             serveClient: false,
-            cors: { origin: corsOrigins, credentials: true },
+            cors: {
+                origin: async (origin, callback) => {
+                    const corsOriginsDynamic = await getCorsOrigins(); // Fetch dynamic CORS origins
+                    if (!origin || corsOriginsDynamic.includes(origin)) {
+                        callback(null, true); // Allow the origin
+                    } else {
+                        callback(new Error('Not allowed by CORS')); // Reject the origin
+                    }
+                },
+                credentials: true,
+            },
             ...socketOptions,
         });
 
