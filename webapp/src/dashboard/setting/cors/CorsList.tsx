@@ -27,7 +27,7 @@ export class CorsListClass extends BaseStateClass<StateType, PropType> {
     handleAddCors = async (e: React.FormEvent) => {
         e.preventDefault();
         const { newCorsUrl, corsList } = this.state;
-        const urlPattern = /^(https?:\/\/)?(localhost|([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(:\d+)?(\/.*)?$/;
+        const urlPattern = /^(https?:\/\/)?(localhost|(\d{1,3}\.){3}\d{1,3}|([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(:\d+)?(\/.*)?$/;
 
         if (!urlPattern.test(newCorsUrl.trim())) {
             alert("Please enter a valid URL.");
