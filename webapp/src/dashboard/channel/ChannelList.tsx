@@ -73,7 +73,7 @@ export class ChannelListClass extends BaseStateClass<StateType, PropType> {
         const { channels, loading, error } = this.state;
 
         return (
-            <Container className="mt-4">
+            <Container>
                 <h2>Channels</h2>
                 {loading && <p>Loading...</p>}
                 {error && <p className="text-danger">{error}</p>}

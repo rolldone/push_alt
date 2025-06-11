@@ -167,7 +167,7 @@ export class SettingAppClass extends BaseStateClass<StateType, PropType> {
                         </div>
                     </div>
                 </div>
-                {this.renderFoot()}
+                {/* {this.renderFoot()} */}
             </div>
             <ToastContainer
                 position="top-right"
