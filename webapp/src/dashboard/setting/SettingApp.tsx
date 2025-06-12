@@ -6,6 +6,7 @@ import Company from "./company/Company";
 import Profile from "./profile/Profile";
 import Admin from "./admin/Admin";
 import CorsList  from "./cors/CorsList";
+import { Col, Container, Row } from "react-bootstrap";
 
 type PropType = {
 
@@ -67,47 +68,17 @@ export class SettingAppClass extends BaseStateClass<StateType, PropType> {
     render() {
         let { segment } = this.state
         return <>
-            <div className="page-wrapper">
-                {/* Page header */}
-                <div className="page-header d-print-none">
-                    <div className="container-xl">
-                        <div className="row g-2 align-items-center">
-                            <div className="col">
-                                <h2 className="page-title">Page Settings</h2>
-                            </div>
-                            {/* Page title actions */}
-                            <div className="col-auto ms-auto d-print-none">
-                                <div className="btn-list">
-                                    {/* <button type="button" className="btn btn-primary" onClick={() => window.history.back()}>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="icon icon-tabler icon-tabler-arrow-left"
-                                            width={24}
-                                            height={24}
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={2}
-                                            stroke="currentColor"
-                                            fill="none"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        >
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M5 12l14 0" />
-                                            <path d="M5 12l6 6" />
-                                            <path d="M5 12l6 -6" />
-                                        </svg>
-                                        Back
-                                    </button> */}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* Page body */}
-                <div className="page-body">
-                    <div className="container-xl">
-                        <div className="card">
-                            <div className="row g-0">
+            <Container fluid>
+                <Row className="row justify-content-center">
+                    <Col md={12}>
+                        <h1 className="my-4" style={{fontWeight: 600, opacity: 0.85}}>Page Settings</h1>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col lg={12}>
+                        <div className="card mb-3">
+                            <div className="card-body">
+                                <div className="row g-0">
                                 <div className="col-12 col-md-3 border-end">
                                     <div className="card-body">
                                         <h4 className="subheader">Basic settings</h4>
@@ -118,7 +89,7 @@ export class SettingAppClass extends BaseStateClass<StateType, PropType> {
                                             >
                                                 Main Setting
                                             </a>
-                                             <a
+                                                <a
                                                 href="#cors"
                                                 className={"list-group-item list-group-item-action d-flex align-items-center " + (segment == "#cors" ? "active" : "")}>
                                                 Cors
@@ -164,11 +135,11 @@ export class SettingAppClass extends BaseStateClass<StateType, PropType> {
                                     </div>
                                 </div>
                             </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                {/* {this.renderFoot()} */}
-            </div>
+                    </Col>
+                </Row>
+            </Container>
             <ToastContainer
                 position="top-right"
                 autoClose={3000}

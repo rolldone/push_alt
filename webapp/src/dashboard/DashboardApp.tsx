@@ -35,8 +35,8 @@ const DashboardContent = () => {
             <Row>
                 <Col lg={12}>
                     <Row>
-                        <Col md={4}>
-                            <Link to={"/dashboard"} className="card main-menu mb-3">
+                        <Col xs={12} sm={6} md={4}>
+                            <Link to={"/dashboard"} className="card main-menu mb-3 flex-column-reverse">
                                 <h5 className="mb-0 me-1">
                                     Dashboard 
                                     
@@ -44,8 +44,8 @@ const DashboardContent = () => {
                                 <i className="bi bi-house"></i>
                             </Link>
                         </Col>
-                        <Col md={4}>
-                            <Link to={"/dashboard/workspaces"} className="card main-menu mb-3">
+                        <Col xs={12} sm={6} md={4}>
+                            <Link to={"/dashboard/workspaces"} className="card main-menu mb-3 flex-column-reverse">
                                 <h5 className="mb-0 me-1">
                                     Workspaces 
                                     
@@ -53,8 +53,8 @@ const DashboardContent = () => {
                                     <i className="bi bi-person-workspace"></i>
                             </Link>
                         </Col>
-                        <Col md={4}>
-                            <Link to={"/dashboard/channels"} className="card main-menu mb-3">
+                        <Col xs={12} sm={6} md={4}>
+                            <Link to={"/dashboard/channels"} className="card main-menu mb-3 flex-column-reverse">
                                 <h5 className="mb-0 me-1">
                                     Channels 
                                     
@@ -62,8 +62,8 @@ const DashboardContent = () => {
                                     <i className="bi bi-list"></i>
                             </Link>
                         </Col>
-                        <Col md={4}>
-                            <Link to={"/dashboard/test-connection"} className="card main-menu mb-3">
+                        <Col xs={12} sm={6} md={4}>
+                            <Link to={"/dashboard/test-connection"} className="card main-menu mb-3 flex-column-reverse">
                                 <h5 className="mb-0 me-1">
                                     Test Connection 
                                     
@@ -71,8 +71,8 @@ const DashboardContent = () => {
                                     <i className="bi bi-reception-4"></i>
                             </Link>
                         </Col>
-                        <Col md={4}>
-                            <Link to={"/dashboard/settings"} className="card main-menu mb-3">
+                        <Col xs={12} sm={6} md={4}>
+                            <Link to={"/dashboard/settings"} className="card main-menu mb-3 flex-column-reverse">
                                 <h5 className="mb-0 me-1">
                                     Settings
                                     

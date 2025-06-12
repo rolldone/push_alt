@@ -306,33 +306,13 @@ $primaryTransition: 0.3s ease-in-out;
                             }
                         }
                     }
-                    #modal-form{
-                        .modal-header{
-                            button{
-                                transition: $primaryTransition;
-                                color: $primaryColor85;
-                                &:hover{
-                                    color: $primaryColor;
-                                }
-                            }
-                        }
-                    }
-                    #modal-form-detail{
-                        input, label{
-                            pointer-events: none;
-                        }
-                        textarea{
-                            min-height: 200px;
-                            max-height: 300px;
-                        }
-                    }
                 }
 
                 &.main-menu{
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    flex-direction: column-reverse;
+                    flex-direction: column;
                     padding: 1.25rem;
                     border: none;
                     text-decoration: none;
@@ -342,6 +322,15 @@ $primaryTransition: 0.3s ease-in-out;
                     background-size: 200% 100%;
                     background-position:right bottom;
                     transition: $primaryTransition;
+                    &.no-hover{
+                        &:hover{
+                            background-position:right bottom;
+                        }
+
+                        h5, i{
+                            color: $primaryColor85 !important;
+                        }
+                    }
                     &:hover{
                         background-position:left bottom;
 
@@ -351,6 +340,7 @@ $primaryTransition: 0.3s ease-in-out;
                     }
 
                     h5{
+                        word-break: break-all;
                         color: $primaryColor85;
                         font-weight: 600;
                         transition: $primaryTransition;

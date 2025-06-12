@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Table, Container } from 'react-bootstrap';
+import { Table, Container, Row, Col } from 'react-bootstrap';
 import ChannelService, { ChannelType } from '../services/ChannelService';
 import BaseStateClass from '../components/helper/BaseStateClass';
 
@@ -73,43 +73,55 @@ export class ChannelListClass extends BaseStateClass<StateType, PropType> {
         const { channels, loading, error } = this.state;
 
         return (
-            <Container>
-                <h2>Channels</h2>
-                {loading && <p>Loading...</p>}
-                {error && <p className="text-danger">{error}</p>}
-                <Table striped bordered hover responsive>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Channel Name</th>
-                            <th>Workspace</th>
-                            <th>Token</th>
-                            <th>Created At</th>
-                            <th>Expires At</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {channels.length ? (
-                            channels.map((channel) => (
-                                <tr key={channel.id}>
-                                    <td>{channel.id}</td>
-                                    <td>{channel.channel_name}</td>
-                                    <td>{channel.workspace?.name || 'N/A'}</td>
-                                    <td>{channel.token}</td>
-                                    <td>{channel.created_at ? new Date(channel.created_at).toLocaleString() : 'N/A'}</td>
-                                    <td>{channel.expires_at ? new Date(channel.expires_at).toLocaleString() : 'N/A'}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={6} className="text-center">
-                                    No channels found.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </Table>
-                {this.renderPagination()}
+            <Container fluid>
+                <Row className="row justify-content-center">
+                    <Col md={12}>
+                        <h1 className="my-4" style={{fontWeight: 600, opacity: 0.85}}>Channels</h1>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col lg={12}>
+                        <div className="card mb-3">
+                            <div className="card-body">
+                                {loading && <p>Loading...</p>}
+                                {error && <p className="text-danger">{error}</p>}
+                                <Table striped hover responsive className='responsive'>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Channel Name</th>
+                                            <th>Workspace</th>
+                                            <th>Token</th>
+                                            <th>Created At</th>
+                                            <th>Expires At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {channels.length ? (
+                                            channels.map((channel) => (
+                                                <tr key={channel.id}>
+                                                    <td>{channel.id}</td>
+                                                    <td>{channel.channel_name}</td>
+                                                    <td>{channel.workspace?.name || 'N/A'}</td>
+                                                    <td>{channel.token}</td>
+                                                    <td>{channel.created_at ? new Date(channel.created_at).toLocaleString() : 'N/A'}</td>
+                                                    <td>{channel.expires_at ? new Date(channel.expires_at).toLocaleString() : 'N/A'}</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan={6} className="text-center">
+                                                    No channels found.
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </Table>
+                                {this.renderPagination()}
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
             </Container>
         );
     }

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import BaseStateClass from "../components/helper/BaseStateClass";
 import WorkspacesService, { WorkspacesType } from "../services/WorkspacesService";
 import { SuperAgentRequest } from "superagent";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Dropdown, Row } from "react-bootstrap";
 import WorkspacesNew, { WorkspacesNewClass } from "./WorkspacesNew";
 import WorkspacesUpdate, { WorkspacesUpdateClass } from "./WorkspacesUpdate";
 
@@ -74,43 +74,63 @@ export class WorkspacesListClass extends BaseStateClass<StateType, PropType> {
         const { workspace_datas, select_workspace, section } = this.state;
 
         return (
-            <div>
-                <Row className="mb-4 align-items-center">
-                    <Col>
-                        <h2>Workspaces</h2> {/* Page Title */}
-                    </Col>
-                    <Col className="text-end">
-                        <Button variant="primary" onClick={this.handleClick.bind(this, "NEW", {})}>
-                            Create Workspace
-                        </Button> {/* Top-right button */}
+            <Container fluid>
+                <Row className="row justify-content-center">
+                    <Col md={12}>
+                        <h1 className="my-4" style={{fontWeight: 600, opacity: 0.85}}>Workspaces</h1>
                     </Col>
                 </Row>
-                <Row xs={1} md={2} lg={3} className="g-4">
-                    {workspace_datas?.map((workspace) => (
-                        <Col key={workspace.id} onClick={this.handleClick.bind(this, "ITEM_CLICK", {
-                            id: workspace.id
-                        })}>
-                            <Card>
-                                <Card.Body>
-                                    <Card.Title>{workspace.name}</Card.Title>
-                                    <Card.Text>{workspace.app_id || "-"}</Card.Text>
-                                    <Card.Text>{workspace.description || "No description"}</Card.Text>
-                                    <Card.Text>
-                                        <small className={workspace.status === "active" ? "text-success" : "text-muted"}>
-                                            {workspace.status}
-                                        </small>
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    ))}
+                <Row>
+                    <Col lg={12}>
+                        <div className="d-flex justify-content-start justify-content-md-start mb-3">
+                            <button onClick={this.handleClick.bind(this, "NEW", {})} className="btn btn-primary" type="button">
+                                <i className="ion-plus-round me-1"></i>
+                                Create Workspace
+                            </button>
+                        </div>
+                        <Row className="g-4">
+                            {workspace_datas?.map((workspace) => (
+                                <Col xs={12} sm={6} md={4}  key={workspace.id}>
+                                    <Card className="main-menu no-hover">
+                                        <div className="w-100 d-flex justify-content-between align-items-center">
+                                            <i className="bi bi-person-workspace"></i>
+                                            <Dropdown className="ms-auto">
+                                                <Dropdown.Toggle  variant="secondary" id={`dropdown-${workspace.id}`} className="me-0">
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu>
+                                                    <Dropdown.Item onClick={this.handleClick.bind(this, "ITEM_CLICK", {
+                                                            id: workspace.id
+                                                    })}>
+                                                        Update
+                                                    </Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </div>
+                                        <Card.Body className="p-0 w-100">
+                                            <h5>
+                                                <br/>
+                                                <Card.Title>{workspace.name}</Card.Title>
+                                                <Card.Text>{workspace.app_id || "-"}</Card.Text>
+                                                <Card.Text>{workspace.description || "No description"}</Card.Text>
+                                                <Card.Text>
+                                                    <small className={workspace.status === "active" ? "text-success" : "text-muted"}>
+                                                        {workspace.status}
+                                                    </small>
+                                                </Card.Text>
+                                            </h5>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
+                            ))}
+                        </Row>
+                        <WorkspacesNew onCloseListener={this.handleListener.bind(this, "WORKSPACES_NEW_LISTENER")} onInit={(props) => this.workspacesNew = props}></WorkspacesNew>
+                        <WorkspacesUpdate onCloseListener={this.handleListener.bind(this, "WORKSPACES_UPDATE_LISTENER")} onInit={(props) => {
+                            // @ts-ignore
+                            this.workspacesUpdate = props
+                        }}></WorkspacesUpdate>
+                    </Col>
                 </Row>
-                <WorkspacesNew onCloseListener={this.handleListener.bind(this, "WORKSPACES_NEW_LISTENER")} onInit={(props) => this.workspacesNew = props}></WorkspacesNew>
-                <WorkspacesUpdate onCloseListener={this.handleListener.bind(this, "WORKSPACES_UPDATE_LISTENER")} onInit={(props) => {
-                    // @ts-ignore
-                    this.workspacesUpdate = props
-                }}></WorkspacesUpdate>
-            </div>
+            </Container>
         );
     }
 }

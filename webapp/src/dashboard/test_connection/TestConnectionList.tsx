@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Button, Card, Col, Row, Dropdown } from 'react-bootstrap';
+import { Button, Card, Col, Row, Dropdown, Container } from 'react-bootstrap';
 import BaseStateClass from '../components/helper/BaseStateClass';
 import TestConnectionService, { TestConnectionType } from '../services/TestConnectionService';
 import { SuperAgentRequest } from 'superagent';
@@ -91,67 +91,79 @@ export class TestConnectionListClass extends BaseStateClass<StateType, PropType>
     const { test_connection_datas, select_test_connection, section } = this.state;
 
     return (
-      <div>
-        <Row className="mb-4 align-items-center">
-          <Col>
-            <h2>Test Connections</h2>
-          </Col>
-          <Col className="text-end">
-            <Button variant="primary" onClick={this.handleClick.bind(this, 'NEW', {})}>
-              New Testing
-            </Button>
-          </Col>
-        </Row>
-        <Row xs={1} md={2} lg={3} className="g-4">
-          {test_connection_datas?.map((testConnection) => (
+      <Container fluid>
+          <Row className="row justify-content-center">
+              <Col md={12}>
+                  <h1 className="my-4" style={{fontWeight: 600, opacity: 0.85}}>Test Connections</h1>
+              </Col>
+          </Row>
+          <Row>
+              <Col lg={12}>
+                  <div className="d-flex justify-content-start justify-content-md-start mb-3">
+                      <button onClick={this.handleClick.bind(this, 'NEW', {})} className="btn btn-primary" type="button">
+                          <i className="ion-plus-round me-1"></i>
+                          New Testing
+                      </button>
+                  </div>
+              </Col>
+          </Row>
+          <Row xs={1} md={2} lg={3} className="g-4">
+            {test_connection_datas?.map((testConnection) => (
             <Col key={testConnection.id}>
-              <Card>
-                <Card.Body className="position-relative">
-                  <Dropdown className="position-absolute top-0 end-0 mt-2 me-2">
-                    <Dropdown.Toggle variant="secondary" id={`dropdown-${testConnection.id}`}>
-                      Actions
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item onClick={this.handleClick.bind(this, 'TEST', { id: testConnection.id })}>
-                        Test
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={this.handleClick.bind(this, 'ITEM_CLICK', { id: testConnection.id })}>
-                        Edit
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={this.handleClick.bind(this, 'DELETE', { id: testConnection.id })}>
-                        Delete
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Card.Title>
-                    {testConnection.workspace?.name} - {testConnection.channel_name}
-                  </Card.Title>
-                  <Card.Text>
-                    <span>ID: {testConnection.id}</span><br />
-                    <span>Workspace ID: {testConnection.workspace_id}</span><br />
-                    <span>Event Name: {testConnection.channel_name}</span><br />
-                    <span>Expires In Seconds: {testConnection.expires_in_seconds || 'N/A'}</span>
-                  </Card.Text>
-                </Card.Body>
-              </Card>
+                <Card className="main-menu no-hover">
+                  <div className="w-100 d-flex justify-content-between align-items-center">
+                      <i className="bi bi-reception-4"></i>
+                      <Dropdown className="ms-auto">
+                          <Dropdown.Toggle  variant="secondary" id={`dropdown-${testConnection.id}`} className="me-0">
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                          <Dropdown.Item onClick={this.handleClick.bind(this, 'TEST', { id: testConnection.id })}>
+                          Test
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={this.handleClick.bind(this, 'ITEM_CLICK', { id: testConnection.id })}>
+                          Edit
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={this.handleClick.bind(this, 'DELETE', { id: testConnection.id })}>
+                          Delete
+                          </Dropdown.Item>
+                      </Dropdown.Menu>
+                      </Dropdown>
+                  </div>
+                  <Card.Body className="p-0 w-100">
+                          <br/>
+                          <h5>
+                          <Card.Title>
+                            {testConnection.workspace?.name}
+                            <br/>
+                            {testConnection.channel_name}
+                          </Card.Title>
+                          </h5>
+                          <Card.Text>
+                            <span>ID: {testConnection.id}</span><br />
+                            <span>Workspace ID: {testConnection.workspace_id}</span><br />
+                            <span>Event Name: {testConnection.channel_name}</span><br />
+                            <span>Expires In Seconds: {testConnection.expires_in_seconds || 'N/A'}</span>
+                          </Card.Text>
+                  </Card.Body>
+                </Card>
             </Col>
-          ))}
-        </Row>
-        <TestConnectionNew
-          onCloseListener={this.handleListener.bind(this, 'TEST_CONNECTION_NEW_LISTENER')}
-          onInit={(props) => (this.testConnectionNew = props)}
-        />
-        <TestConnectionUpdate
-          onCloseListener={this.handleListener.bind(this, 'TEST_CONNECTION_UPDATE_LISTENER')}
-          onInit={(props) => {
-            // @ts-ignore
-            this.testConnectionUpdate = props;
-          }}
-        />
-        <TestConnectionModal
-          onInit={(props) => (this.testConnectionModal = props)}
-          onCloseListener={this.handleListener.bind(this, "TEST_CONNECTION_MODAL")}></TestConnectionModal>
-      </div>
+            ))}
+          </Row>
+          <TestConnectionNew
+              onCloseListener={this.handleListener.bind(this, 'TEST_CONNECTION_NEW_LISTENER')}
+              onInit={(props) => (this.testConnectionNew = props)}
+          />
+          <TestConnectionUpdate
+              onCloseListener={this.handleListener.bind(this, 'TEST_CONNECTION_UPDATE_LISTENER')}
+              onInit={(props) => {
+              // @ts-ignore
+              this.testConnectionUpdate = props;
+              }}
+          />
+          <TestConnectionModal
+              onInit={(props) => (this.testConnectionModal = props)}
+              onCloseListener={this.handleListener.bind(this, "TEST_CONNECTION_MODAL")}></TestConnectionModal>
+      </Container>
     );
   }
 }
