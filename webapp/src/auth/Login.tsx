@@ -1,4 +1,4 @@
-import { Container, Form } from "react-bootstrap";
+import { Col, Container, Form, Row } from "react-bootstrap";
 import BaseStateClass from "./components/helper/BaseStateClass";
 import { useEffect, useMemo, useState } from "react";
 import AuthService, { AuthType } from "./services/AuthService";
@@ -126,47 +126,70 @@ export class LoginCLass extends BaseStateClass<LoginState, LoginProps> {
             form_error
         } = this.state
         return (
-            <Container className="mt-5">
-                <h2>Login</h2>
-                <div id="form-login">
-                    <div className="mb-3">
-                        <label htmlFor="email" className="form-label">Email</label>
-                        <Form.Control
-                            isInvalid={form_error.email != null}
-                            name="email"
-                            type="email"
-                            className="form-control"
-                            id="email"
-                            value={form_data.email || ""}
-                            onChange={this.handleChange.bind(this, "FORM_DATA", {})}
-                            placeholder="Enter email" />
-                        <Form.Control.Feedback type="invalid">
-                            {form_error.email}
-                        </Form.Control.Feedback>
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="password" className="form-label">Password</label>
-                        <Form.Control
-                            isInvalid={form_error.password != null}
-                            name="password"
-                            type="password"
-                            className="form-control"
-                            id="password"
-                            value={form_data.password || ""}
-                            onChange={this.handleChange.bind(this, "FORM_DATA", {})}
-                            placeholder="Enter password" />
-                        <Form.Control.Feedback type="invalid">
-                            {form_error.password}
-                        </Form.Control.Feedback>
-                    </div>
-                    <ButtonLoading
-                        text="Login"
-                        http_status={this.state.http_status}
-                        onClick={this.handleClick.bind(this, "SUBMIT", {})}
-                    >
-                        ...Loading
-                    </ButtonLoading>
-                </div>
+            <Container className="position-relative">
+                <Row className="row justify-content-center">
+                    <Col md={9} lg={7}>
+                        <div className="card">
+                            <div className="card-header p-3 pb-0 text-uppercase text-center">
+                                <h2 className="m-0 d-flex align-items-center justify-content-center" style={{minHeight: "100px"}}>Artywiz<br/>sv-pushalt</h2>
+                            </div>
+
+                            <div className="card-body">
+                                <h4 className="text-center mb-4">
+                                    <i className="bi bi-lock-fill me-2"></i>
+                                    Sign into your account
+                                </h4>
+                                <div id="form-login" onSubmit={this.handleClick.bind(this, "SUBMIT", {})}>
+                                    <div className="row mb-3 justify-content-center">
+                                        <div className="col-md-6">
+                                            {/* <label htmlFor="email" className="form-label">Email</label> */}
+                                            <Form.Control
+                                                isInvalid={form_error.email != null}
+                                                name="email"
+                                                type="email"
+                                                className="form-control"
+                                                id="email"
+                                                value={form_data.email || ""}
+                                                onChange={this.handleChange.bind(this, "FORM_DATA", {})}
+                                                placeholder="Enter email" />
+                                            <Form.Control.Feedback type="invalid">
+                                                {form_error.email}
+                                            </Form.Control.Feedback>
+                                        </div>
+                                    </div>
+                                    <div className="row mb-3 justify-content-center">
+                                        <div className="col-md-6">
+                                            {/* <label htmlFor="password" classN    ame="form-label">Password</label> */}
+                                            <Form.Control
+                                                isInvalid={form_error.password != null}
+                                                name="password"
+                                                type="password"
+                                                className="form-control"
+                                                id="password"
+                                                value={form_data.password || ""}
+                                                onChange={this.handleChange.bind(this, "FORM_DATA", {})}
+                                                placeholder="Enter password" />
+                                            <Form.Control.Feedback type="invalid">
+                                                {form_error.password}
+                                            </Form.Control.Feedback>
+                                        </div>
+                                    </div>
+                                    <div className="row justify-content-center">
+                                        <div className="col-md-6">
+                                            <ButtonLoading
+                                                text="Login"
+                                                http_status={this.state.http_status}
+                                                onClick={this.handleClick.bind(this, "SUBMIT", {})}
+                                            >
+                                                ...Loading
+                                            </ButtonLoading>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
             </Container>
         );
     }

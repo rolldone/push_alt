@@ -1,5 +1,8 @@
 // Color
+$darkColor: #2B2831;
+$darkColor85: rgba(43, 40, 49, 0.85);
 $primaryColor: #212529;
+$primaryColor85: rgba(33, 37, 41, 0.85);
 $lightColor: #f8fafc;
 $darkBoxShadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15);
 
@@ -84,12 +87,12 @@ $primaryTransition: 0.3s ease-in-out;
             height: $topnavHeight;
             display: flex;
             background-color: $primaryColor;
-            color: $lightColor;
 
             a {
                 width: 100%;
                 height: 100%;
                 position: relative;
+                color: $lightColor;
 
                 &::after {
                     content: "";
@@ -140,6 +143,17 @@ $primaryTransition: 0.3s ease-in-out;
 
             >.nav {
                 flex-direction: column;
+
+                .sidenav-menu-heading{
+                    width: 100%;
+                    color: $lightColor;
+                    opacity: 0.4;
+                    padding: 1rem 1rem 0.5rem 1rem;
+                    user-select: none;
+                    font-size: 0.8rem;
+                    transition: $primaryTransition;
+                    text-transform: uppercase;
+                }
 
                 a.nav-link {
                     display: flex;
@@ -236,8 +250,9 @@ $primaryTransition: 0.3s ease-in-out;
                     }
 
                     .dropdown-menu{
-                        right: 0;
-                        left: auto;
+                        right: 0 !important;
+                        left: auto !important;
+                        min-width: 100px;
                         a.dropdown-item{
                             color: $primaryColor;
                             opacity: 0.8;
@@ -249,6 +264,105 @@ $primaryTransition: 0.3s ease-in-out;
 
         section#mainContent{
             margin-top: $topnavHeight;
+
+            .card{
+                box-shadow: $darkBoxShadow;
+
+                .card-header{
+                    color: $primaryColor85;
+                    background: transparent;
+                    padding: 1rem;
+                    h5{
+                        font-weight: 600;
+                    }
+                }
+                
+                .card-body{
+                    color: $darkColor85;
+                    .dataTables_wrapper.dt-bootstrap5.no-footer{
+                        .row:nth-of-type(2){
+                            display: block;
+                            width: 1px;
+                            min-width: 100%;
+                            overflow-x: auto;
+                        }
+                    }
+                    table{
+                        color: $darkColor85 !important;
+                        width: 100% !important;
+                    }
+                    ul.pagination{
+                        li.page-item{
+                            &.active{
+                                .page-link{
+                                    color: #fff;
+                                    background-color: $primaryColor85;
+                                    border-color: $primaryColor85;
+                                }
+                            }
+
+                            .page-link{
+                                color: $primaryColor85;
+                            }
+                        }
+                    }
+                    #modal-form{
+                        .modal-header{
+                            button{
+                                transition: $primaryTransition;
+                                color: $primaryColor85;
+                                &:hover{
+                                    color: $primaryColor;
+                                }
+                            }
+                        }
+                    }
+                    #modal-form-detail{
+                        input, label{
+                            pointer-events: none;
+                        }
+                        textarea{
+                            min-height: 200px;
+                            max-height: 300px;
+                        }
+                    }
+                }
+
+                &.main-menu{
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    flex-direction: column-reverse;
+                    padding: 1.25rem;
+                    border: none;
+                    text-decoration: none;
+                    border: none;
+                    border-left: 0.25rem solid $primaryColor;
+                    background: linear-gradient(to left, #fff 50%, $primaryColor 50%);
+                    background-size: 200% 100%;
+                    background-position:right bottom;
+                    transition: $primaryTransition;
+                    &:hover{
+                        background-position:left bottom;
+
+                        h5, i{
+                            color: $lightColor;
+                        }
+                    }
+
+                    h5{
+                        color: $primaryColor85;
+                        font-weight: 600;
+                        transition: $primaryTransition;
+                    }
+
+                    i{
+                        color: $primaryColor85;
+                        font-size: 2em;
+                        transition: $primaryTransition;
+                    }
+                }
+            }
         }
     }
 }
